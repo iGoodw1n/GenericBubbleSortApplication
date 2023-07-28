@@ -4,10 +4,33 @@
     {
         static void Main(string[] args)
         {
-            //object[] arr = { 2, 1, -4, 3, 0 };
-            //object[] arr = { "Bob", "Henry", "Andy", "Greg" };
+            int[] arrInt = { 2, 1, -4, 3, 0 };
 
-            object[] arr = new Employee[]
+            SortArray<int> sortArrayInt = new SortArray<int>();
+
+            sortArrayInt.BubbleSort(arrInt);
+
+            foreach (var item in arrInt)
+            {
+                Console.WriteLine(item);
+            }
+
+            Console.WriteLine();
+
+            string[] arrString = { "Bob", "Henry", "Andy", "Greg" };
+
+            SortArray<string> sortArrayString = new SortArray<string>();
+
+            sortArrayString.BubbleSort(arrString);
+
+            foreach (var item in arrString)
+            {
+                Console.WriteLine(item);
+            }
+
+            Console.WriteLine();
+
+            Employee[] arrEmployee = new Employee[]
             {
                 new Employee { Id = 4, Name = "John" },
                 new Employee { Id = 2, Name = "Bob" },
@@ -15,11 +38,11 @@
                 new Employee { Id = 1, Name = "Tom" }
             };
 
-            SortArray sortArray = new SortArray();
+            SortArray<Employee> sortArrayEmployee = new SortArray<Employee>();
 
-            sortArray.BubbleSort(arr);
+            sortArrayEmployee.BubbleSort(arrEmployee);
 
-            foreach(var item in arr)
+            foreach(var item in arrEmployee)
             {
                 Console.WriteLine(item);
             }
@@ -28,15 +51,20 @@
         }
     }
 
-    public class Employee : IComparable
+    public class Employee : IComparable<Employee>
     {
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public int CompareTo(object? obj)
+        public int CompareTo(Employee? other)
         {
-            return this.Id.CompareTo(((Employee)obj).Id);
+            return this.Id.CompareTo(other.Id);
         }
+
+        //public int CompareTo(object? obj)
+        //{
+        //    return this.Id.CompareTo(((Employee)obj).Id);
+        //}
 
         public override string ToString()
         {
@@ -44,9 +72,9 @@
         }
     }
 
-    public class SortArray
+    public class SortArray<T> where T : IComparable<T>
     {
-        public void BubbleSort(object[] arr)
+        public void BubbleSort(T[] arr)
         {
             int n = arr.Length;
 
@@ -54,7 +82,7 @@
             {
                 for (int j = 0; j < n - i - 1; j++)
                 {
-                    if (((IComparable)arr[j]).CompareTo(arr[j + 1]) > 0)
+                    if (arr[j].CompareTo(arr[j + 1]) > 0)
                     {
                         Swap(arr, j);
                     }
@@ -62,9 +90,9 @@
             }
         }
 
-        private void Swap(object[] arr, int j)
+        private void Swap(T[] arr, int j)
         {
-            object temp = arr[j];
+            T temp = arr[j];
             arr[j] = arr[j + 1];
             arr[j + 1] = temp;
         }
